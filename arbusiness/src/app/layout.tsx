@@ -45,7 +45,7 @@ export default function RootLayout({
           <Suspense fallback={ < Loading />}>
           
           </Suspense>
-          <ThemeProvider>{children}</ThemeProvider>
+          <div>{children}</div>
           <div>
             {/*  Works, since Carousel is a Client Component */}
             /
