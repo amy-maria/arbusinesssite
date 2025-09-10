@@ -2,15 +2,17 @@
 
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},
-  },
-  --font-mono: var(--font-geist-mono);
-}
+    tailwindcss: {},
+    autoprefixer: {}
+  }
+  
+};
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --font-mono: var(--font-geist-mono);
   }
 }
 

@@ -3,8 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
 import ThemeProvider from './ui/theme-provider';
-import Carousel from './ui/carousel'
-import './global.css'
+import { Suspense } from "react";
+//import Carousel from './ui/carousel'
+
+import Loading from './loading';
+import NotFound from "./not-found";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,14 +38,18 @@ export default function RootLayout({
           {/* Prefetched when the link is hovered or enters the viewport */}
           <Link href="/blog">Blog</Link>
           {/* No prefetching */}
-          <a href="/contact">Contact</a>
+          <Link href="/contact">Contact</Link>
         </nav>
         {/* Place children where you want to render a page or nested layout */}
         <main>
+          <Suspense fallback={ < Loading />}>
+          
+          </Suspense>
           <ThemeProvider>{children}</ThemeProvider>
           <div>
             {/*  Works, since Carousel is a Client Component */}
-            <Carousel />
+            /
+            {/*<Carousel />*/}
           </div>
           </main>
       </body>

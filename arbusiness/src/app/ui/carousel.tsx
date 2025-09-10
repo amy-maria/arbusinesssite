@@ -1,5 +1,5 @@
-'use client'
+//'use client'
  
-import { Carousel } from 'acme-carousel'
+//import { Carousel } from 'acme-carousel'
  
-export default Carousel
+//export default Carousel

@@ -1,4 +1,4 @@
-import Posts from '@/app/ui/posts'
+import Posts from '../../ui/posts.tsx'
 import { Suspense } from 'react'
 import styles from './blog.module.css'
  
@@ -11,6 +11,6 @@ export default function Page() {
     <Suspense fallback={<div>Loading...</div>}>
       <Posts posts={posts} />
     </Suspense>
-    <main className={styles.blog}></main>
+   </main>
   )
 }
