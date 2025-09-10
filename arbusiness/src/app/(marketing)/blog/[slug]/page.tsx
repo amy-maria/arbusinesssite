@@ -1,4 +1,6 @@
 import { request, gql } from 'graphql-request';
+import LikeButton from '../../../ui/like-button';
+import DislikeButton from '../../../ui/dislike-button';
 
 const API_URL = 'http://localhost:10031/graphql';
 
@@ -40,6 +42,8 @@ export default async function SinglePostPage({ params }) {
       </p>
       {/* dangerouslySetInnerHTML is used for rendering raw HTML from the post content */}
       <div dangerouslySetInnerHTML={{ __html: postBy.content }} />
+       {/*<LikeButton initialCount={likes} postId={id} />
+        <DislikeButton initialCount={dislikes} postId={id} />*/}
     </div>
   );
 }

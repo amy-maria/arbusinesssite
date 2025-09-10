@@ -1,6 +1,5 @@
 'use client'
  
-import { incrementLike } from './actions'
 import { useState } from 'react'
  
 export default function LikeButton({ initialLikes }: { initialLikes: number }) {
@@ -15,7 +14,7 @@ export default function LikeButton({ initialLikes }: { initialLikes: number }) {
           setLikes(updatedLikes)
         }}
       >
-        Like
+      ❤️
       </button>
     </>
   )

@@ -27,7 +27,7 @@ export default function RootLayout({
            <Link href="/">Home</Link>
           <Link href="/blog">Blog</Link>
           {/* No prefetching */}
-          <Link href="/contact">Contact</Link>
+          <Link href="/about">About</Link>
         </nav>
         </header>
         {/* Place children where you want to render a page or nested layout */}
