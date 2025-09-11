@@ -44,6 +44,7 @@ export default async function SinglePostPage({ params }) {
       <div dangerouslySetInnerHTML={{ __html: postBy.content }} />
        {/*<LikeButton initialCount={likes} postId={id} />
         <DislikeButton initialCount={dislikes} postId={id} />*/}
+        <LikeButton/><DislikeButton/>
     </div>
   );
 }

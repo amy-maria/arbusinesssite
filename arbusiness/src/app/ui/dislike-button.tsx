@@ -6,15 +6,16 @@ export default function DislikeButton({ initialDislikes }: { initialDislikes: nu
  
   return (
     <>
-      <p>Dislikes: {dislikes}</p>
+      <p>Dislikes: {dislikes}
       <button
         onClick={async () => {
           const updatedDislikes = await incrementDislike()
-          setDislikes(updatedDislikes)
+          setDislikes(updatedDislikes +1)
         }}
       >
       👎
       </button>
+      </p>
       </>
       );
       }

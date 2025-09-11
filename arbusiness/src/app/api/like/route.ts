@@ -1,17 +1,32 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  try {
-    const { postId } = await request.json();
+const API_URL = 'http://localhost:10031/graphql'
+//const WP_AUTH_TOKEN = process.env.WP_AUTH_TOKEN! // optional, if mutations need auth
 
-    // Here you would connect to your database (e.g., WordPress, MongoDB, etc.)
-    // and update the like count for the given postId.
-    // Example: await db.posts.update({ where: { id: postId }, data: { likes: { increment: 1 } } });
-    
-    console.log(`Like received for post: ${postId}`);
+export async function POST(req: Request) {
+  const { postId, action } = await req.json() // action = "like" or "dislike"
 
-    return NextResponse.json({ success: true, message: 'Like counted.' });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error updating like count.' }, { status: 500 });
-  }
+  const mutation = `
+    mutation UpdateLikes($postId: ID!, $action: String!) {
+      updateLikes(postId: $postId, action: $action) {
+        likes
+        dislikes
+      }
+    }
+  `
+
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      //Authorization: `Bearer ${WP_AUTH_TOKEN}`,
+    },
+    body: JSON.stringify({
+      query: mutation,
+      variables: { postId, action },
+    }),
+  })
+
+  const data = await res.json()
+  return NextResponse.json(data)
 }
