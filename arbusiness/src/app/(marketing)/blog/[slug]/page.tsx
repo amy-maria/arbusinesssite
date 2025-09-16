@@ -1,6 +1,6 @@
 import { request, gql } from 'graphql-request';
 import LikeButton from '../../../ui/like-button';
-import DislikeButton from '../../../ui/dislike-button';
+//import DislikeButton from '../../../ui/dislike-button';
 
 const API_URL = 'http://localhost:10031/graphql';
 
@@ -15,20 +15,23 @@ const GET_SINGLE_POST = gql`
           name
         }
       }
+      id
+      likes
     }
   }
 `;
 
 // This async component receives the 'params' object from Next.js
 export default async function SinglePostPage({ params }) {
-  const { slug } = params;
+  //await the params promise//
+  const { slug } = await params;
 
   if (!slug) {
     return <div>Post not found.</div>;
   }
 
   // Fetch the data for the specific post
-  const { postBy } = await request(API_URL, GET_SINGLE_POST, { slug });
+  const { postBy,  } = await request(API_URL, GET_SINGLE_POST, { slug });
 
   if (!postBy) {
     return <div>Post not found.</div>;
@@ -42,9 +45,9 @@ export default async function SinglePostPage({ params }) {
       </p>
       {/* dangerouslySetInnerHTML is used for rendering raw HTML from the post content */}
       <div dangerouslySetInnerHTML={{ __html: postBy.content }} />
-       {/*<LikeButton initialCount={likes} postId={id} />
-        <DislikeButton initialCount={dislikes} postId={id} />*/}
-        <LikeButton/><DislikeButton/>
+      {/*<LikeButton initialCount={likes} postId={id} />
+       // <DislikeButton initialCount={dislikes} postId={id} />*/}
+        <LikeButton initialLikes={postBy.likes} postId={postBy.id}/>
     </div>
   );
 }
