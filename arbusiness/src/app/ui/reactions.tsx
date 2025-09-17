@@ -43,85 +43,73 @@ async function updateReaction(postId: string, action: 'like' | 'dislike'): Promi
 export default function Reactions({ initialLikes, initialDislikes, postId }: ReactionsProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [dislikes, setDislikes] = useState(initialDislikes);
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
+  const [reaction, setReaction] = useState<'like' | 'dislike' | null>(null);
   const [message, setMessage] = useState('');
 
   // Initialize session state
   useEffect(() => {
-    const likedPosts = JSON.parse(sessionStorage.getItem('likedPosts') || '[]');
-    const dislikedPosts = JSON.parse(sessionStorage.getItem('dislikedPosts') || '[]');
-
-    if (likedPosts.includes(postId)) setLiked(true);
-    if (dislikedPosts.includes(postId)) setDisliked(true);
+    const reactions = JSON.parse(sessionStorage.getItem('reactions') || '{}');
+    if (reactions[postId]) {
+      setReaction(reactions[postId]);
+    }
   }, [postId]);
 
-  const handleLike = async () => {
-    if (liked) {
-      setMessage('You already liked this post!');
+  const handleReaction = async (action: 'like' | 'dislike') => {
+    if (reaction) {
+      setMessage('You already reacted to this post!');
       setTimeout(() => setMessage(''), 2000);
       return;
     }
-    const updated = await updateReaction(postId, 'like');
-    if (updated.likes !== -1) {
+
+    const updated = await updateReaction(postId, action);
+    if (updated.likes !== -1 && updated.dislikes !== -1) {
       setLikes(updated.likes);
-      setLiked(true);
-
-      const likedPosts = JSON.parse(sessionStorage.getItem('likedPosts') || '[]');
-      sessionStorage.setItem('likedPosts', JSON.stringify([...likedPosts, postId]));
-    }
-  };
-
-  const handleDislike = async () => {
-     if (disliked) {
-      setMessage('You already disliked this post!');
-      setTimeout(() => setMessage(''), 2000);
-      return;
-    }
-    const updated = await updateReaction(postId, 'dislike');
-    if (updated.dislikes !== -1) {
       setDislikes(updated.dislikes);
-      setDisliked(true);
+      setReaction(action);
 
-      const dislikedPosts = JSON.parse(sessionStorage.getItem('dislikedPosts') || '[]');
-      sessionStorage.setItem('dislikedPosts', JSON.stringify([...dislikedPosts, postId]));
+      const reactions = JSON.parse(sessionStorage.getItem('reactions') || '{}');
+      reactions[postId] = action;
+      sessionStorage.setItem('reactions', JSON.stringify(reactions));
     }
   };
-  const buttonStyle = (active: boolean) => ({
-    cursor: active ? 'not-allowed' : 'pointer',
-    opacity: active ? 0.5 : 1,
+
+  const buttonStyle = (disabled: boolean) => ({
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.5 : 1,
     padding: '0.5rem 1rem',
     borderRadius: '0.5rem',
     border: '1px solid #ccc',
     transition: 'opacity 0.2s, background 0.2s',
-    background: active ? '#e0e0e0' : '#fff',
-   
+    background: disabled ? '#e0e0e0' : '#fff',
   });
 
-
   return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <button
+          style={buttonStyle(!!reaction)}
+          onClick={() => handleReaction('like')}
+          disabled={!!reaction}
+          title={reaction ? 'You already reacted to this post' : 'Like this post'}
+        >
+          ❤️ <span style={{ color: 'black', padding: '5px' }}>{likes}</span>
+        </button>
 
-      <button 
-      style={buttonStyle(liked)}
-      onClick={handleLike} 
-      title={ liked ? 'You already liked this post': 'Like this post'}
-      > ❤️ <span style={{color: 'black', padding: '5px'}}>{likes}</span>
-      </button>
+        <button
+          style={buttonStyle(!!reaction)}
+          onClick={() => handleReaction('dislike')}
+          disabled={!!reaction}
+          title={reaction ? 'You already reacted to this post' : 'Dislike this post'}
+        >
+          👎 <span style={{ color: 'black', padding: '5px' }}>{dislikes}</span>
+        </button>
+      </div>
 
-      <button 
-      style={buttonStyle(disliked)}
-      onClick={handleDislike} 
-      title={disliked ? 'You already disliked this post': ''}
-      > 👎 <span style={{color: 'black', padding: '5px'}}>{dislikes}</span>
-      </button>
-    </div>
-    {message && (
-        <div style= {{ color: 'red', fontSize: '0.9rem'}}>
-            {message}
+      {message && (
+        <div style={{ color: 'red', fontSize: '0.9rem' }}>
+          {message}
         </div>
-    )}
+      )}
     </div>
   );
 }
