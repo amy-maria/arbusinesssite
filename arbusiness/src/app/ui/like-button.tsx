@@ -1,6 +1,8 @@
 'use client'
  import { useState } from 'react'
 
+
+
  {/* 1. button
       2. handleClick
       3. update like count
@@ -14,16 +16,33 @@ type LikeButtonProps = {
 }
     
 
+
 async function incrementLike(postId: string): Promise<number> {
   try {
     const res = await fetch('http://localhost:10031/graphql', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ postId, action: 'like' }),
+      body: JSON.stringify({ 
+        query: `
+        mutation UpdateLikes($input: UpdateLikesInput!) {
+        updateLikes(input: $input) {
+          likes
+        }
+      }
+        `,
+        variables: {
+          input: {
+            postId: postId, 
+            action: 'like' ,
+          },
+        },
+      }),
   })
   if (!res.ok) {
     throw new Error('Failed to update likes')
-  }
+    }
+ 
+  
 
   const data = await res.json()
   const newLikes = data?.data?.updateLikes?.likes 
@@ -39,11 +58,16 @@ async function incrementLike(postId: string): Promise<number> {
 export default function LikeButton({ initialLikes, postId }: LikeButtonProps) {
 
   const [likes, setLikes] = useState(initialLikes)
+  const [liked, setLiked]= useState(false)
  
   const handleLike = async () => {
+    if (liked) return; //prevent multiple clicks
     const updateLikes = await incrementLike(postId)
     if (updateLikes !== -1){
-      setLikes(updateLikes)
+      setLikes(updateLikes);
+      setLiked(true); //mark as clicked
+      const likedPosts = JSON.parse(sessionStorage.getItem('likedPosts') || '[]');
+      sessionStorage.setItem('likedPosts', JSON.stringify([...likedPosts, postId]));
     }
   }
   return (
