@@ -1,15 +1,15 @@
 import {gql} from '@apollo/client';
 
 export const Get_Post_Likes = gql`
-query GetPostLikes($id: ID!) {
+  query GetPostLikes($id: ID!) {
   post(id: $id, idType: DATABASE_ID) {
     likes
     dislikes
   }
 }
-`;
+`
 
-query GetSinglePostBySlug($slug: String!) {
+  query GetSinglePostBySlug($slug: String!) {
   postBy(slug: $slug) {
     title
     content
@@ -17,3 +17,17 @@ query GetSinglePostBySlug($slug: String!) {
     videoUrl
   }
 }
+  query GetCarouselSlides {
+  carouselPosts {
+    nodes {
+      title
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+    }
+  }
+};
+
