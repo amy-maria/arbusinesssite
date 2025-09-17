@@ -4,11 +4,10 @@ const API_URL = 'http://localhost:10031/graphql';
 
 const GET_CAROUSEL = gql`
   query GetCarouselSlides {
-    carouselPosts {
+    pages(where: {id:YOUR_PAGE_ID}) {
       nodes {
         title
-        featuredImage {
-          node {
+        gallery { #ACF custom field
             sourceUrl
             altText
           }
@@ -20,5 +19,8 @@ const GET_CAROUSEL = gql`
 
 export async function getCarouselSlides() {
   const data = await request(API_URL, GET_CAROUSEL);
-  return data.carouselPosts.nodes;
-}
+  return data.pages.nodes.map((page: any) => ({
+    title: page.title,
+    images: page.gallery, 
+}));
+} 
