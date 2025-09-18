@@ -1,13 +1,27 @@
 import { request, gql } from 'graphql-request';
 
-const API_URL = 'http://localhost:10031/graphql';
+const GRAPHQL_ENDPOINT = 'http://localhost:10031/graphql';
 
-const GET_CAROUSEL = gql`
-  query GetCarouselSlides {
-    pages(where: {id:YOUR_PAGE_ID}) {
-      nodes {
-        title
-        gallery { #ACF custom field
+export const Get_Carousel_Slides = gql`
+  query GetCarouselSlides($slug: ID!) {
+    page(id: $slug, idType: URI) {
+      id
+      title
+      carouselImages {
+        carouselImage1 {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        carouselImage2 {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        carouselImage3 {
+          node {
             sourceUrl
             altText
           }
@@ -17,10 +31,25 @@ const GET_CAROUSEL = gql`
   }
 `;
 
-export async function getCarouselSlides() {
-  const data = await request(API_URL, GET_CAROUSEL);
-  return data.pages.nodes.map((page: any) => ({
-    title: page.title,
-    images: page.gallery, 
-}));
-} 
+export async function getCarouselSlides(slug: string) {
+  try {
+    const variables = { slug };
+    const data = await request(GRAPHQL_ENDPOINT, Get_Carousel_Slides, variables);
+
+    if (!data?.page?.carouselImages) return [];
+
+    const { carouselImages } = data.page;
+
+    // Collect images into an array
+    const images = [
+      carouselImages.carouselImage1,
+      carouselImages.carouselImage2,
+      carouselImages.carouselImage3,
+    ].filter(Boolean); // remove any nulls
+
+    return images;
+  } catch (error) {
+    console.error("Error fetching carousel slides:", error);
+    return [];
+  }
+}

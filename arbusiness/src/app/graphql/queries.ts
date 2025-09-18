@@ -8,36 +8,3 @@ export const Get_Post_Likes = gql`
   }
 }
 `
-query GetCarouselSlides {
-  pages(where: {id: YOUR_PAGE_ID}) {
-    nodes {
-      carouselImages {
-        sourcelUrl 
-        altText
-      }
-    }
-  }
-}
-
-  query GetSinglePostBySlug($slug: String!) {
-  postBy(slug: $slug) {
-    title
-    content
-    date
-    videoUrl
-  }
-}
-  query GetCarouselSlides {
-  carouselPosts {
-    nodes {
-      title
-      featuredImage {
-        node {
-          sourceUrl
-          altText
-        }
-      }
-    }
-  }
-}
-

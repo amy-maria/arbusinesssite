@@ -1,14 +1,61 @@
-import Carousel from "./ui/carousel";
-import { getCarouselSlides } from "./api/carousel/getcarousel";
+'use client'
+import { getCarouselSlides } from './api/carousel/getcarousel'
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
+interface CarouselImage {
+  sourceUrl: string;
+  altText: string;
+}
 
-export default async function Home() {
-  const slides = await getCarouselSlides();
+export default function Home() {
+  const [carousel, setCarousel] = useState<CarouselImage[]>([]);
+  const pageSlug = '/'; // Replace with your page URI if different
+
+  useEffect(() => {
+    async function fetchCarousel() {
+      try {
+        const carouselData = await getCarouselSlides(pageSlug);
+
+        // Flatten carouselImage1,2,3 into an array
+        const images: CarouselImage[] = [];
+        ['carouselImage1', 'carouselImage2', 'carouselImage3'].forEach(key => {
+          const imgNode = carouselData[key];
+          if (imgNode && imgNode.node) {
+            images.push({
+              sourceUrl: imgNode.node.sourceUrl,
+              altText: imgNode.node.altText || 'Carousel Image',
+            });
+          }
+        });
+
+        setCarousel(images);
+      } catch (error) {
+        console.error('Failed to load carousel:', error);
+      }
+    }
+
+    fetchCarousel();
+  }, []);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      Main app page 
-      
-      <Carousel slides={slides} />
+    <div>
+      <h1>Homepage Carousel</h1>
+      <div className="carousel">
+        {carousel.map((img, idx) => (
+          <div key={idx} className="carousel-slide">
+            <Image
+              src={img.sourceUrl}
+              alt={img.altText}
+              width={800}
+              height={400}
+              priority
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
+
+ 
