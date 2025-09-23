@@ -2,7 +2,7 @@ import { request, gql } from 'graphql-request';
 import { fromGlobalId } from 'graphql-relay';
 import Reactions from 'app/ui/reactions';
 
-const API_URL = 'http://localhost:10031/graphql';
+const API_URL =process.env.NEXT_PUBLIC_WORDPRESS_API_URL
 
 const GET_SINGLE_POST = gql`
   query GetSinglePostBySlug($slug: String!) {

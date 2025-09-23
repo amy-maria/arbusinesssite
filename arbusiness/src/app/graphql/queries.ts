@@ -7,8 +7,8 @@ export const Get_Post_Likes = gql`
     dislikes
   }
 }
-  query GetCarouselSlides {
-  page(id: "troubleshoot-carousel-9-22-25/", idType: URI) {
+  query GetCarouselSlides ($slug: ID!){
+  page(id: $slug, idType: URI) {
     id
     title
     carouselImages {
@@ -24,7 +24,19 @@ export const Get_Post_Likes = gql`
         altText
       }
     }
-      ccarouselImage3 {
+      carouselImage3 {
+        node {
+        sourceUrl
+        altText
+      }
+    }
+      carouselImage4 {
+        node {
+        sourceUrl
+        altText
+      }
+    }
+      carouselImage5 {
         node {
         sourceUrl
         altText

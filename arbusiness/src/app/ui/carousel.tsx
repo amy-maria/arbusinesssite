@@ -26,7 +26,7 @@ export default function Carousel({ slides }: { slides: { sourceUrl: string; altT
     loop={true}>
       {slides.map((slide, i) => (
         <SwiperSlide key={i}>
-          <div className='relative w-full h-64'>
+          <div className='relative w-full h-64 '>
           <Image src={slide.sourceUrl} 
           alt={slide.altText || `Slide ${i+1}`} 
          fill

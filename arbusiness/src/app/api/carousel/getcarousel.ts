@@ -1,6 +1,7 @@
 import { request, gql } from 'graphql-request';
 
-const GRAPHQL_ENDPOINT = 'http://localhost:10031/graphql';
+
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 export const Get_Carousel_Slides = gql`
   query GetCarouselSlides($slug: ID!) {
@@ -20,7 +21,20 @@ export const Get_Carousel_Slides = gql`
             altText
           }
         }
+        
         carouselImage3 {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+          carouselImage4 {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+          carouselImage5 {
           node {
             sourceUrl
             altText
@@ -36,7 +50,7 @@ export async function getCarouselSlides(slug: string) {
     const data = await request(GRAPHQL_ENDPOINT, Get_Carousel_Slides, {slug});
     const carouselData = data.page.carouselImages;
 
-    const slides = ['carouselImage1','carouselImage2', 'carouselImage3'].map((key) => carouselData[key]?.node).filter(Boolean) as { sourceUrl: string; altText: string}[];
+    const slides = ['carouselImage1','carouselImage2', 'carouselImage3', 'carouselImage4', 'carouselImage5'].map((key) => carouselData[key]?.node).filter(Boolean) as { sourceUrl: string; altText: string}[];
 
     return slides;
   }

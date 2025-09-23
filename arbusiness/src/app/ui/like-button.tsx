@@ -15,11 +15,11 @@ type LikeButtonProps = {
   postId: string // Add postId to the props
 }
     
-
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 async function incrementLike(postId: string): Promise<number> {
   try {
-    const res = await fetch('http://localhost:10031/graphql', {
+    const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 

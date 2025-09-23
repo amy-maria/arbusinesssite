@@ -3,6 +3,7 @@ import { getCarouselSlides } from './api/carousel/getcarousel'
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Carousel from './ui/carousel';
+import CTA from './ui/cta';
 
 interface CarouselImage {
   sourceUrl: string;
@@ -30,8 +31,8 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Homepage Carousel</h1>
-     
+      <h1>Homepage </h1>
+        <CTA /> 
         < Carousel slides={slides} />
       
           </div>

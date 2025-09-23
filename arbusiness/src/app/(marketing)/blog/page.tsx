@@ -1,7 +1,7 @@
 import {request, gql} from 'graphql-request';
 import Link from 'next/link';
 
-const API_URL = 'http://localhost:10031/graphql';
+const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 const GET_POSTS = gql`
   query GetPosts {
