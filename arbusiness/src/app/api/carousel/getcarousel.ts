@@ -32,24 +32,13 @@ export const Get_Carousel_Slides = gql`
 `;
 
 export async function getCarouselSlides(slug: string) {
-  try {
-    const variables = { slug };
-    const data = await request(GRAPHQL_ENDPOINT, Get_Carousel_Slides, variables);
+ 
+    const data = await request(GRAPHQL_ENDPOINT, Get_Carousel_Slides, {slug});
+    const carouselData = data.page.carouselImages;
 
-    if (!data?.page?.carouselImages) return [];
+    const slides = ['carouselImage1','carouselImage2', 'carouselImage3'].map((key) => carouselData[key]?.node).filter(Boolean) as { sourceUrl: string; altText: string}[];
 
-    const { carouselImages } = data.page;
-
-    // Collect images into an array
-    const images = [
-      carouselImages.carouselImage1,
-      carouselImages.carouselImage2,
-      carouselImages.carouselImage3,
-    ].filter(Boolean); // remove any nulls
-
-    return images;
-  } catch (error) {
-    console.error("Error fetching carousel slides:", error);
-    return [];
+    return slides;
   }
-}
+
+    

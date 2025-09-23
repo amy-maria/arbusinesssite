@@ -2,6 +2,7 @@
 import { getCarouselSlides } from './api/carousel/getcarousel'
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Carousel from './ui/carousel';
 
 interface CarouselImage {
   sourceUrl: string;
@@ -9,52 +10,32 @@ interface CarouselImage {
 }
 
 export default function Home() {
-  const [carousel, setCarousel] = useState<CarouselImage[]>([]);
-  const pageSlug = '/'; // Replace with your page URI if different
+  const [slides, setSlides] = useState<{ sourceUrl: string; altText: string }[]>([]);
+  const pageSlug = 'troubleshoot-carousel-9-22-25/'; // Replace with your page URI if different
 
   useEffect(() => {
     async function fetchCarousel() {
-      try {
-        const carouselData = await getCarouselSlides(pageSlug);
-
+      try{
+        const data = await getCarouselSlides(pageSlug);
+        console.log("Carousel data from WP:", data); 
         // Flatten carouselImage1,2,3 into an array
-        const images: CarouselImage[] = [];
-        ['carouselImage1', 'carouselImage2', 'carouselImage3'].forEach(key => {
-          const imgNode = carouselData[key];
-          if (imgNode && imgNode.node) {
-            images.push({
-              sourceUrl: imgNode.node.sourceUrl,
-              altText: imgNode.node.altText || 'Carousel Image',
-            });
-          }
-        });
-
-        setCarousel(images);
+        setSlides(data);
       } catch (error) {
         console.error('Failed to load carousel:', error);
       }
     }
-
-    fetchCarousel();
+        fetchCarousel();
   }, []);
+    
 
   return (
     <div>
       <h1>Homepage Carousel</h1>
-      <div className="carousel">
-        {carousel.map((img, idx) => (
-          <div key={idx} className="carousel-slide">
-            <Image
-              src={img.sourceUrl}
-              alt={img.altText}
-              width={800}
-              height={400}
-              priority
-            />
+     
+        < Carousel slides={slides} />
+      
           </div>
-        ))}
-      </div>
-    </div>
+      
   );
 }
 
