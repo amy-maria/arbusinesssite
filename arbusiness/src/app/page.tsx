@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Carousel from './ui/carousel';
 import CTA from './ui/cta';
+import Hero from './ui/hero'
 
 interface CarouselImage {
   sourceUrl: string;
@@ -32,6 +33,7 @@ export default function Home() {
   return (
     <div>
       <h1>Homepage </h1>
+        <Hero  />
         <CTA /> 
         < Carousel slides={slides} />
       
