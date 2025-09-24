@@ -56,6 +56,11 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
   {/*YouTube video , allows embed and click out for video*/}
   {postBy.videoUrl && (
   <div>
+     <p>
+      <a href={postBy.videoUrl} target="_blank" rel="noopener noreferrer">
+        Open video in YouTube
+      </a>
+    </p>
     <iframe
       width="100%"
       height="400"
@@ -66,11 +71,7 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       allowFullScreen
   
     />
-    <p>
-      <a href={postBy.videoUrl} target="_blank" rel="noopener noreferrer">
-        Open video in YouTube
-      </a>
-    </p>
+   
   </div>
   )}
       <Reactions
