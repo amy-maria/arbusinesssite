@@ -6,6 +6,7 @@ import Carousel from './ui/carousel';
 import CTA from './ui/cta';
 import Hero from './ui/hero'
 
+
 interface CarouselImage {
   sourceUrl: string;
   altText: string;
@@ -36,7 +37,7 @@ export default function Home() {
         <Hero  />
         <CTA /> 
         < Carousel slides={slides} />
-      
+     
           </div>
       
   );
