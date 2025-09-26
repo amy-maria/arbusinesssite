@@ -25,16 +25,11 @@ export default function CTA() {
               Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-              <a
+               <a
                 href="#"
-                className="rounded-md bg-gray-700 px-3.5 py-2.5 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-gray-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 mb"
               >
-                {' '}
-                Get started{' '}
-              </a>
-              <a href="#" className="text-sm/6 font-semibold text-white hover:text-gray-100">
-                Learn more
-                <span aria-hidden="true">→</span>
+                Get started
               </a>
             </div>
           </div>

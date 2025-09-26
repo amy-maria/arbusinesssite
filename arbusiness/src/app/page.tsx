@@ -1,16 +1,12 @@
 'use client'
 import { getCarouselSlides } from './api/carousel/getcarousel'
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Carousel from './ui/carousel';
 import CTA from './ui/cta';
 import Hero from './ui/hero'
 
 
-interface CarouselImage {
-  sourceUrl: string;
-  altText: string;
-}
+
 
 export default function Home() {
   const [slides, setSlides] = useState<{ sourceUrl: string; altText: string }[]>([]);
@@ -33,12 +29,12 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Homepage </h1>
+      
         <Hero  />
         <CTA /> 
         < Carousel slides={slides} />
-     
-          </div>
+        
+      </div>
       
   );
 }

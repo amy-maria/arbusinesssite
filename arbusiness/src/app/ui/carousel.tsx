@@ -30,7 +30,7 @@ export default function Carousel({ slides }: { slides: { sourceUrl: string; altT
           <Image src={slide.sourceUrl} 
           alt={slide.altText || `Slide ${i+1}`} 
          fill
-          style={{ objectFit: 'cover'}}
+          style={{ objectFit: 'contain'}}
           priority
           />
           </div>
