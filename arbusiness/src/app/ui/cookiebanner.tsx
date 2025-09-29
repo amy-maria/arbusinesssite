@@ -1,104 +1,36 @@
 "use client";
-import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import CookiePreferencesModal from "./CookiePreferencesModal";
 
-interface CookiePreferences {
-  functional: boolean;
-  analytics: boolean;
-  marketing: boolean;
+import { useState, useEffect } from "react";
+
+let showBannerFunc: (() => void) | null = null;
+
+// Function you can call from FooterNav
+export function showCookieBanner() {
+  if (showBannerFunc) showBannerFunc();
 }
 
-export interface CookieBannerRef {
-  openModal: () => void;
-}
+export default function CookieBanner() {
+  const [visible, setVisible] = useState(false);
 
-const CookieBanner = forwardRef((props, ref) => {
-  const [showBanner, setShowBanner] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-
-  useImperativeHandle(ref, () => ({
-    openModal: () => setShowModal(true),
-  }));
-  // Expose openModal method to parent via ref
- useEffect(() => {
-    try {
-      const prefs = localStorage.getItem("cookiePreferences");
-      if (!prefs) setShowBanner(true);
-    } catch {
-      // in case localStorage is unavailable
-      setShowBanner(true);
-    }
+  // Register the setter for external access
+  useEffect(() => {
+    showBannerFunc = () => setVisible(true);
+    return () => {
+      showBannerFunc = null;
+    };
   }, []);
 
- 
-
-  const handleAcceptAll = () => {
-    localStorage.setItem(
-      "cookiePreferences",
-      JSON.stringify({ functional: true, analytics: true, marketing: true })
-    );
-    setShowBanner(false);
-    window.dispatchEvent(new Event("cookiePreferencesUpdated"));
-  };
-
-  const handleRejectAll = () => {
-    localStorage.setItem(
-      "cookiePreferences",
-      JSON.stringify({ functional: true, analytics: false, marketing: false })
-    );
-    setShowBanner(false);
-    window.dispatchEvent(new Event("cookiePreferencesUpdated"));
-  };
-
+  if (!visible) return null;
 
   return (
-    <>
-      {/* Banner */}
-      {showBanner && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50">
-          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-sm">
-              We use cookies to improve your experience.{" "}
-              <a href="/cookie-policy" className="underline">
-                Learn more
-              </a>
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={handleRejectAll}
-                className="px-3 py-1 bg-gray-600 rounded hover:bg-gray-700 text-sm"
-                aria-label="Reject all non-essential cookies"
-              >
-                Reject All
-              </button>
-              <button
-                onClick={handleAcceptAll}
-                className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700 text-sm"
-                aria-label="Accept all cookies"
-              >
-                Accept All
-              </button>
-              <button
-                onClick={() => setShowModal(true)}
-                className="px-3 py-1 border rounded text-sm"
-                aria-label="Manage cookie preferences"
-              >
-                Manage Preferences
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal */}
-      <CookiePreferencesModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      />
-    </>
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 z-50 flex justify-between items-center">
+      <span>This website uses cookies to improve your experience.</span>
+      <button
+        onClick={() => setVisible(false)}
+        className="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+      >
+        Close
+      </button>
+    </div>
   );
-});
-
-CookieBanner.displayName = "CookieBanner";
-
-export default CookieBanner;
+}

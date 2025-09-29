@@ -18,10 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <>
     <html lang="en">
-      <body className="bg-white text-gray-900">
+      <body>
+  
         <HeaderNav />
-
+      
+      
         <main className="px-4 py-12 max-w-6xl mx-auto">
           <Suspense fallback={<Loading />}>
             {children}
@@ -35,5 +38,6 @@ export default function RootLayout({
         <ClientScripts />
       </body>
     </html>
+    </>
   );
 }

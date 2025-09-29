@@ -58,9 +58,11 @@ export default function About() {
       </section>
 
       {/* Contact Section */}
-      <section className="mx-auto max-w-2xl lg:mx-0 space-y-6">
+      <section className=" mx-auto max-w-2xl lg:mx-0 space-y-6">
         <h3 className="text-4xl font-semibold text-white sm:text-5xl">
+          <span id="contact">
           Contact Us
+          </span>
         </h3>
         <p className="text-gray-300 text-lg sm:text-xl">
           Have questions or want to start a project? Reach out using the form

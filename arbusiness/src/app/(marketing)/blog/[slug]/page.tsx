@@ -1,6 +1,8 @@
 import { request, gql } from 'graphql-request';
 import { fromGlobalId } from 'graphql-relay';
 import Reactions from 'app/ui/reactions';
+import CommentsSection from './commentsection';
+
 
 const API_URL =process.env.NEXT_PUBLIC_WORDPRESS_API_URL
 
@@ -19,6 +21,7 @@ const GET_SINGLE_POST = gql`
       likes
       dislikes
       videoUrl
+      
     }
   }
 `;
@@ -43,7 +46,12 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
   // Convert global ID to database ID
   const dbId = fromGlobalId(postBy.id).id; 
   //await the params promise//
- 
+ // Determine WordPress post ID
+  // If your GraphQL query contains a field like wpId, you can use it. Otherwise, you need to map.
+  const wpPostId = fromGlobalId(postBy.id).id  // fallback to dbId if no WP ID
+
+  const wpBaseUrl = process.env.NEXT_PUBLIC_WP_SITE_URL; // Add your WP site URL to .env
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-4">{postBy.title}</h1>
@@ -55,7 +63,7 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       <div dangerouslySetInnerHTML={{ __html: postBy.content }}/>
   {/*YouTube video , allows embed and click out for video*/}
   {postBy.videoUrl && (
-  <div>
+  <div className="my-6">
      <p>
       <a href={postBy.videoUrl} target="_blank" rel="noopener noreferrer">
         Open video in YouTube
@@ -66,10 +74,8 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       height="400"
       src={formatYouTubeUrl(postBy.videoUrl)}
       title="Post video"
-      frameBorder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
-  
     />
    
   </div>
@@ -79,6 +85,7 @@ export default async function SinglePostPage({ params }: { params: Promise<{ slu
       initialDislikes={postBy.dislikes ?? 0} 
       postId={dbId} 
       />
+      <CommentsSection postId={wpPostId} wpBaseUrl={wpBaseUrl!} />
    </div>
   );
   }
