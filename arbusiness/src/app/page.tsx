@@ -4,8 +4,12 @@ import { useEffect, useState } from 'react';
 import Carousel from './ui/carousel';
 import CTA from './ui/cta';
 import Hero from './ui/hero'
+import ReviewSchema from './ui/reviewschema';
 
-
+const AVERAGE_RATING = 4.7; // Replace with actual fetched rating
+const REVIEW_COUNT = 150; // Replace with actual fetched count
+const BUSINESS_NAME = "Your Client's Business Name";
+const CLIENT_SITE_URL= process.env.NEXT_PUBLIC_WP_SITE_URL;
 
 
 export default function Home() {
@@ -29,7 +33,12 @@ export default function Home() {
 
   return (
     <div>
-      
+       <ReviewSchema 
+        businessName={BUSINESS_NAME}
+        ratingValue={AVERAGE_RATING}
+        reviewCount={REVIEW_COUNT}
+        url={CLIENT_SITE_URL} // Use the site's main URL or the post's canonical URL
+         />
         <Hero  />
         <CTA /> 
         < Carousel slides={slides} />
