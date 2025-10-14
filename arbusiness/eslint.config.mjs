@@ -20,6 +20,25 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
-];
+],
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin: testing-library/react",
+    "plugin:jest-dom/recommended",
+  ]
+},
+  {
+  "overrides": [
+    {
+      "files": ["tests/**/*"],
+      "plugins": ["jest"],
+      "env": {
+        "jest/globals": true
+      }
+    }
+  ]
+
+};
 
 export default eslintConfig;
