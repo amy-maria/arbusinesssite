@@ -12,19 +12,75 @@ export default function ContactForm() {
     message: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+const [formData, setFormData] = useState(initialFormData);
+const [ status, setStatus] = useState('idle');
+const [responseMessage, setResponseMessage]= useState('');
+
+  const handleChange = (e) /*: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });*/
+     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    setStatus('loading');
+    setResponseMessage('');
+
     // Add form submission logic here (API call, etc.)
+    try {
+      //api call to new email api
+      const response = await fetch('api/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data= await response.json();
+
+      if (response.ok) {
+        setStatus('success');
+        setResponseMessage(data.message || "Your message was sent successfully.");
+        setFormData(initialFormData);
+      } else {
+        setStatus('error');
+        setResponseMessage(data.message || "Submission failed. Please check your form inputs and try again");
+      }
+    }catch (error) {
+      console.error('Email submission error:', error);
+      setStatus('error');
+      setResponseMessage("A network error occurred. Message was not sent");
+    }
   };
 
+
+  const isSubmitting = status === 'loading';
+
+  // Define colors based on form status
+  const statusClasses = {
+    success: 'bg-green-600',
+    error: 'bg-red-600',
+    idle: 'bg-cta hover:bg-cta-hover',
+    loading: 'bg-gray-500 cursor-not-allowed'
+  };
+  
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-neutral-dark rounded-lg text-white space-y-6">
       <h2 className="text-2xl font-bold text-white mb-4">Contact Us</h2>
+
+{/* Submission Status Message */}
+      {responseMessage && (
+        <div 
+          role="alert" 
+          className={`p-4 rounded-md text-sm font-medium ${
+            status === 'success' ? 'bg-green-700' : 'bg-red-700'
+          } text-white`}
+        >
+          {responseMessage}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
@@ -38,6 +94,7 @@ export default function ContactForm() {
             value={formData.firstName}
             onChange={handleChange}
             required
+             disabled={isSubmitting || status === 'success'}
             className="mt-1 block w-full rounded-md bg-white/5 px-3 py-2 text-white placeholder:text-gray-400 focus:outline-2 focus:outline-cta"
           />
         </div>
