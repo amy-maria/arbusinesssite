@@ -2,26 +2,34 @@
 
 import { useState } from "react";
 
+
 export default function ContactForm() {
-  const [formData, setFormData] = useState({
+  const initialFormData= {
     firstName: "",
     lastName: "",
     organization: "",
     country: "United States",
     email: "",
     message: "",
-  });
+  };
 
 const [formData, setFormData] = useState(initialFormData);
 const [ status, setStatus] = useState('idle');
 const [responseMessage, setResponseMessage]= useState('');
 
-  const handleChange = (e) /*: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });*/
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
      setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleReset = () => {
+    setFormData(initialFormData);
+    setStatus('idle');
+    setResponseMessage('');
+  };
+
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
     setStatus('loading');
@@ -30,29 +38,30 @@ const [responseMessage, setResponseMessage]= useState('');
     // Add form submission logic here (API call, etc.)
     try {
       //api call to new email api
-      const response = await fetch('api/email', {
+      const response = await fetch('/api/email', {
+       
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-
+      
       const data= await response.json();
 
       if (response.ok) {
         setStatus('success');
         setResponseMessage(data.message || "Your message was sent successfully.");
         setFormData(initialFormData);
-      } else {
+    } else {
         setStatus('error');
         setResponseMessage(data.message || "Submission failed. Please check your form inputs and try again");
-      }
-    }catch (error) {
+    }
+  } catch (error) {
       console.error('Email submission error:', error);
       setStatus('error');
       setResponseMessage("A network error occurred. Message was not sent");
-    }
+    };
   };
 
 

@@ -24,15 +24,28 @@ const GET_POSTS = gql`
 
 export default function BlogPosts() {
   const [allPosts, setAllPosts] = useState([]);//store all posts in state
+  //error handling if server error
+  const [loading, setLoading]= useState(true);
+  const [ error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const POSTS_PER_PAGE = 5;
 
   // Fetch all posts on mount
   useEffect(() => {
     async function fetchPosts() {
+      setLoading(true);
+      setError(null);
+      try {
       const { posts } = await request(API_URL, GET_POSTS);
-      setAllPosts(posts.edges.map(edge => edge.node)); //map edges to node objects
+      setAllPosts(posts.edges.map(edge => edge.node)); 
+      } catch(err) {
+        console.error("Error fetching posts:", err);
+        setError("Failed to load posts. Please try again later.");
+      } finally {
+        setLoading(false);
+      }    
     }
+
     fetchPosts();
   }, []);
 
@@ -49,7 +62,10 @@ export default function BlogPosts() {
     window.scrollTo(0, 0); // optional: scroll to top on page change
   };//updates page state, triggers useMemo
 
-  if (allPosts.length === 0) return <div>Loading posts...</div>;
+  //error handling if posts fail to load
+  if (loading) return <div>Loading posts ...</div>;
+  if (error) return <div className="text-red-600">{error}</div>;
+  if (allPosts.length === 0) return <div>No posts found</div>;
 
 
   
