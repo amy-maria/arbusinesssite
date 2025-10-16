@@ -3,6 +3,7 @@ import { fromGlobalId } from 'graphql-relay';
 import { Metadata } from 'next';
 import Reactions from 'app/ui/reactions';
 import CommentsSection from './commentsection';
+import { notFound } from 'next/navigation';
 
 const wpBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL; // Add your WP site URL to .env
 const FRONTEND_URL = process.env.NEXT_PUBLIC_WP_SITE_URL;
@@ -46,12 +47,33 @@ const GET_SINGLE_POST = gql`
 // Re-use your GraphQL request logic to fetch the data
 export async function generateMetadata({ params }: {  params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params; 
-  const { postBy } = await request(API_URL, GET_SINGLE_POST, { slug });
+  let postBy;
+  
+  try {
+    const response = await request(API_URL, GET_SINGLE_POST, { slug });
+    postBy = response.postBy;
 
-  if (!postBy || !postBy.seo) return {};
+    if (!postBy || !postBy.seo) 
+      {return <div className="text-center py-20 text-lg text-red-600">Post not found.</div>;
+      }
+    } catch (err: any) {
+      console.error("Error fetching single post:" , err);
+      //graceful network server error handling
+      return (
+        <div className="text-center py-20 space-y-4">
+        <p className="text-red-600">Failed to load post. Please try again later.</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Retry
+        </button>
+      </div>
+      );
+    }
 
-  const seo = postBy.seo;
-  const ogImage = seo.opengraphImage;
+    const seo = postBy.seo;
+    const ogImage = seo.opengraphImage;
   //const imageUrl = ogImage.uri || 'your_default_image_url';
   // Flag to determine if we should include image metadata
   //DEFINE IMAGE VARIABLES FIRST (MUST BE OUTSIDE ANY NESTED BLOCK)

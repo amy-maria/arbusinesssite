@@ -6,6 +6,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        balance: '#7775d6',
+        pretty: '#E935C1',
+      },
+      backgroundImage: {
+        'cta-gradient':'radial-gradient(circle, #7775D6 0%, #E935C1 100%)',
+      },
         // Primary CTA colors
         project: {
           DEFAULT: '#1D4ED8',      // main CTA blue

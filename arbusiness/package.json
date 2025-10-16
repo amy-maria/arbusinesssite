@@ -10,7 +10,8 @@
     "lint:fix": "eslint --fix",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "cypress: open": "cypress open"
+    "cypress: open": "cypress open",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
