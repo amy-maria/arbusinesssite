@@ -14,15 +14,13 @@ export default function FooterNav() {
           © {new Date().getFullYear()} Your Company, Inc. All rights reserved.
         </div>
         <div className="flex gap-4 text-2xl">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={iconClass} aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/in/amymrowell/" target="_blank" rel="noopener noreferrer" className={iconClass} aria-label="LinkedIn">
             <FaLinkedin />
           </a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={iconClass} aria-label="GitHub">
+          <a href="https://github.com/amy-maria" target="_blank" rel="noopener noreferrer" className={iconClass} aria-label="GitHub">
             <FaGithub />
           </a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={iconClass} aria-label="Facebook">
-            <FaFacebook />
-          </a>
+          
         </div>
       </div>
 

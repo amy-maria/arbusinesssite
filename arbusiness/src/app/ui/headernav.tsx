@@ -36,9 +36,9 @@ export default function HeaderNav() {
             <Link href="/blog" className={linkClasses}>
               Blog
             </Link>
-            <Link href="/about/#contact" className={linkClasses}>
+            <a href="/about/#contact" className={linkClasses}>
               Contact
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -63,10 +63,10 @@ export default function HeaderNav() {
             <Link href="/blog" className="block px-3 py-2 rounded text-white hover:bg-blue-600" onClick={() => setIsOpen(false)}>
               Blog
             </Link>
-            <Link href="/contact" className="block px-3 py-2 rounded text-white bg-blue-600 hover:bg-blue-700" 
+            <a href="/about/#contact" className="block px-3 py-2 rounded text-white bg-blue-600 hover:bg-blue-700" 
             onClick={() => setIsOpen(false)}>
               Contact
-            </Link>
+            </a>
           </div>
         )}
       </nav>

@@ -5,8 +5,8 @@ import {FaReact,FaJs,FaPhp, FaWordpress,FaPython,FaHtml5,FaCss3,FaGoogle, } from
 
 
 const employees = [
-    {name: 'Amy', title:'CEO', buttonText: 'Message'},
-    {name: 'Fi', title:'COO', buttonText: 'Message'}
+    {name: 'Amy', title:'CEO'},
+    {name: 'Fi', title:'COO'}
 ];
 const skills = [
   {language:'React', icon: FaReact},
